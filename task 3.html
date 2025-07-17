@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculator</title>
+  <style>
+    body {
+      text-align: center;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: burlywood;
+    }
+    .container {
+      max-width: 300px;
+      width: 100%;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+     
+    }
+    #result {
+      width: 100%;
+      height: 40px;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      padding: 5px;
+      text-align: right;
+      box-sizing: border-box;
+    }
+    .rows {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 10px;
+    }
+    button {
+      font-size: 1.2rem;
+      padding: 15px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <input id="result" type="text" readonly>
+    <div class="rows">
+      <button onclick="clearScreen()">AC</button>
+      <button onclick="deleteLast()">DEL</button>
+      <button onclick="appendValue('%')">%</button>
+      <button onclick="appendValue('/')">/</button>
+
+      <button onclick="appendValue('7')">7</button>
+      <button onclick="appendValue('8')">8</button>
+      <button onclick="appendValue('9')">9</button>
+      <button onclick="appendValue('')"></button>
+
+      <button onclick="appendValue('6')">6</button>
+      <button onclick="appendValue('5')">5</button>
+      <button onclick="appendValue('4')">4</button>
+      <button onclick="appendValue('-')">-</button>
+
+      <button onclick="appendValue('3')">3</button>
+      <button onclick="appendValue('2')">2</button>
+      <button onclick="appendValue('1')">1</button>
+      <button onclick="appendValue('+')">+</button>
+
+      <button onclick="appendValue('0')">0</button>
+      <button onclick="appendValue('00')">00</button>
+      <button onclick="appendValue('.')">.</button>
+      <button onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    const output = document.getElementById('result');
+
+    function appendValue(val) {
+      if (output.value === 'error') output.value = '';
+      output.value += val;
+    }
+
+    function clearScreen() {
+      output.value = '';
+    }
+
+    function deleteLast() {
+      output.value = output.value.slice(0, -1);
+    }
+
+    function calculate() {
+      try {
+        
+        output.value = eval(output.value);
+      } catch {
+        output.value = 'error';
+      }
+    }
+  </script>
+</body>
+</html>
