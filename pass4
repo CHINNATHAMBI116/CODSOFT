@@ -1,0 +1,64 @@
+import heapq
+
+class LinkStateRouter:
+    def __init__(self, graph):
+        self.graph = graph  # Graph as an adjacency matrix
+
+    def dijkstra(self, start):
+        n = len(self.graph)
+        distances = {node: float('inf') for node in range(n)}
+        parents = {node: None for node in range(n)}  # to store paths
+        distances[start] = 0
+        priority_queue = [(0, start)]
+
+        while priority_queue:
+            curr_dist, curr_node = heapq.heappop(priority_queue)
+            if curr_dist > distances[curr_node]:
+                continue
+
+            for neighbor, weight in enumerate(self.graph[curr_node]):
+                if weight != 0:  # Skip non-connected nodes
+                    distance = curr_dist + weight
+                    if distance < distances[neighbor]:
+                        distances[neighbor] = distance
+                        parents[neighbor] = curr_node
+                        heapq.heappush(priority_queue, (distance, neighbor))
+
+        return distances, parents
+
+    def calculate_routes(self):
+        return {
+            node: self.dijkstra(node)
+            for node in range(len(self.graph))
+        }
+
+    def get_path(self, parents, target):
+        """Reconstruct path from parents dictionary."""
+        path = []
+        while target is not None:
+            path.insert(0, target)
+            target = parents[target]
+        return path
+
+
+# Example Usage
+graph = [
+    [0, 2, 0, 1, 0],
+    [2, 0, 3, 2, 0],
+    [0, 3, 0, 0, 1],
+    [1, 2, 0, 0, 4],
+    [0, 0, 1, 4, 0]
+]
+
+router = LinkStateRouter(graph)
+routes = router.calculate_routes()
+
+print("Link State Routing Table:")
+for start_node, (distances, parents) in routes.items():
+    print(f"\nFrom {start_node}:")
+    for target, dist in distances.items():
+        if dist == float('inf'):
+            print(f"  To {target}: No path")
+        else:
+            path = router.get_path(parents, target)
+            print(f"  To {target}: Distance = {dist}, Path = {path}")
